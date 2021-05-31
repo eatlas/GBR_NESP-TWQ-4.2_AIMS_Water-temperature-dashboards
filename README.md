@@ -34,3 +34,42 @@ The R-Markdown code is executed using the `rmarkdown::render` method.
 Example:
 
 ```R -e "rmarkdown::render('moorings_storyboard.Rmd',output_file='moorings_storyboard.html')"```
+
+## Licence
+
+This project is released under GPL-3 for compatibility with dependencies' licence.
+
+    Oceanographic drivers of bleaching in the GBR: Water temperature dashboards (NESP TWQ 4.2, AIMS)
+    Copyright (C) 2021  Eduardo Klein Salas (eklein@ocean-analytics.com.au)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
+### Dependencies' licence
+
+| Package        | Licence           | Package website                                                  |
+| -------------- | ----------------- | ---------------------------------------------------------------- |
+| cmocean:       | MIT               | https://cran.r-project.org/web/packages/cmocean/index.html       |
+| dplyr:         | MIT               | https://cran.r-project.org/web/packages/dplyr/index.html         |
+| DT:            | GPL-3             | https://cran.r-project.org/web/packages/DT/index.html            |
+| flexdashboard: | MIT               | https://cran.r-project.org/web/packages/flexdashboard/index.html |
+| ggplot2:       | MIT               | https://cran.r-project.org/web/packages/ggplot2/index.html       |
+| ggpubr:        | GPL-2             | https://cran.r-project.org/web/packages/ggpubr/index.html        |
+| htmltools:     | GPL-2 | GPL-3     | https://cran.r-project.org/web/packages/htmltools/index.html     |
+| leaflet:       | GPL-3             | https://cran.r-project.org/web/packages/leaflet/index.html       |
+| lubridate:     | GPL-2 | GPL-3     | https://cran.r-project.org/web/packages/lubridate/index.html     |
+| plotly:        | MIT               | https://cran.r-project.org/web/packages/plotly/index.html        |
+| readr:         | GPL-2 | GPL-3     | https://cran.r-project.org/web/packages/readr/index.html         |
+| R.utils:       | LGPL-2.1 | LGPL-3 | https://cran.r-project.org/web/packages/R.utils/index.html       |
+| stringr:       | GPL-2             | https://cran.r-project.org/web/packages/stringr/index.html       |
