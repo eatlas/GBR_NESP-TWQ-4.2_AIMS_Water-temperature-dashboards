@@ -25,7 +25,7 @@ and https://www.qld.gov.au/environment/coasts-waterways/beach/monitoring/waves-s
 
 The input files need to be copied into its dedicated sub-folder in the `data` folder.
 
-For more information, contact [Eduardo Klein Salas](eklein@ocean-analytics.com.au).
+For more information, contact [Eduardo Klein Salas](mailto:eklein@ocean-analytics.com.au).
 
 ## Code execution
 
