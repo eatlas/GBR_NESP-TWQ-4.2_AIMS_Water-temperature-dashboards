@@ -1,0 +1,11 @@
+SITE_ID,SITE,LONGITUDE,LATITUDE,climFileName
+10001,Agincourt Reef Number 3,145.82251000000002,-15.982780000000002,AgincourtReefNumber3_weatherstation_clim-SSTAARS.csv
+10002,Cleveland Bay,146.89174686025405,-19.143399919173124,ClevelandBay_weatherstation_clim-SSTAARS.csv
+10003,Davies Reef,147.6368894711937,-18.83262530723929,DaviesReef_weatherstation_clim-SSTAARS.csv
+10004,Hardy Reef,149.182583,-19.745928,HardyReef_weatherstation_clim-SSTAARS.csv
+10005,Heron Island,151.96285943817884,-23.44911179707912,HeronIsland_weatherstation_clim-SSTAARS.csv
+10006,Lizard Island,145.4594399668232,-14.691188199763978,LizardIsland_weatherstation_clim-SSTAARS.csv
+10007,Myrmidon Reef,147.38168097879395,-18.274166269024217,MyrmidonReef_weatherstation_clim-SSTAARS.csv
+10008,One Tree Island,152.06330611411605,-23.498635565958182,OneTreeIsland_weatherstation_clim-SSTAARS.csv
+10009,Halftide Rocks AWS/Square Rocks,150.89256730702166,-23.105964188240126,HalftideRocksAWSSquareRocks_weatherstation_clim-SSTAARS.csv
+10010,Yongala,147.620452880859,-19.303716659545895,Yongala_weatherstation_clim-SSTAARS.csv

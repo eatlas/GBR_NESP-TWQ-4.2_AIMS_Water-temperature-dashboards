@@ -1,0 +1,498 @@
+---
+title: "  GBR Temperature Dashboard"
+output:
+  flexdashboard::flex_dashboard:
+    logo: AIMS-NESP.png
+    orientation: rows
+    vertical_layout: scroll
+    theme: cosmo
+    social: [ "menu" ]
+    navbar:
+      - { title: "HOME", href: "https://eatlas.org.au/gbr/nesp-twq-4-2-temperature-data-2015-17", align: right }
+params:
+  siteID: 30004
+---
+
+<!--
+eklein. eklein@ocean-analytics.com.au
+This is the code for generating the QLD-wavebuoys Dashboard
+
+
+-->
+
+
+<style>
+.navbar-inverse {
+  background-color:#335b84;
+  border-color:black;
+}
+.navbar-brand {
+  font-size: x-large;
+  color: white!important;
+}
+.nav-tabs-custom > .nav-tabs > li.active {border-top-color: #335b84}
+}
+</style>
+
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(htmltools)
+library(leaflet)
+library(plotly)
+library(readr)
+library(lubridate)
+library(dplyr)
+library(ggplot2)
+library(ggpubr)
+library(DT)
+library(stringr)
+library(R.utils)
+
+
+##############
+## Constants
+##############
+summer.start = 274
+climYear.start = 2015
+climYear.end = 2017
+siteID.selected = as.numeric(params$siteID)
+##siteID.selected = 30002     ## manual selection of a site
+
+
+###############
+## Functions
+###############
+
+tidyPlotly = function(pp){
+  config(pp, displaylogo = FALSE)
+  ## set xscale and fix legend labels
+  pp = plotly_build(pp)
+  #pp$x$layout$xaxis$tickvals = c(1,30,60,90,120,150,180,210,240,270,300, 330, 365)
+  pp$x$layout$xaxis$tickvals = c(1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335)
+  pp$x$layout$xaxis$ticktext = c("OCT","NOV","DEC","JAN", "FEB","MAR","APR","MAY","JUN","JUL","AUG", "SEP", "OCT")
+
+  ## dirty fix of the legend labels
+  for (i in 1:length(pp$x$data)){
+      if (!is.null(pp$x$data[[i]]$name)){
+          pp$x$data[[i]]$name =  gsub("\\(","",str_split(pp$x$data[[i]]$name,",")[[1]][1])
+      }
+  }
+  pp = pp %>% config(pp, displaylogo = FALSE)
+  return(pp)
+}
+
+
+fillTimeGaps = function(df, interval){
+  ## fill the time gaps with NAs
+  df.time = data.frame(dateTime = seq(min(df$dateTime), max(df$dateTime), by=interval))
+  df = full_join(df, df.time, by="dateTime")
+  df = df %>% arrange(dateTime)
+  return(df)
+}
+
+
+shiftSummer = function(dateTime, summer.start=274){
+  ## shift yday relative summer start
+  ## shift the year to match the climatological year start
+  ## default Oct-01
+  yDay.shifted = ifelse(yday(dateTime)<summer.start, yday(dateTime) + (365-summer.start) + 1, yday(dateTime) - summer.start + 1)
+  year.shifted = ifelse(yday(dateTime)>=summer.start, year(dateTime)+1, year(dateTime))
+  return(list(yDay.shifted= yDay.shifted, year.shifted = year.shifted))
+}
+
+shiftSummer.day = function(yDay, summer.start=274){
+  ## shift yday relative summer start
+  ## default Oct-01
+  yDay.shifted = ifelse(yDay<summer.start, yDay + (365-summer.start) + 1, yDay - summer.start + 1)
+  return(yDay.shifted)
+}
+
+addSmoothSD = function(climDF, spanNumber=0.5){
+  ## add smoothed 1,2,3 sd bands to the climatology file
+  ## based on summer yday
+  climDF$sd1.upper = predict(loess((TEMP.mean+TEMP.sd)~yDay.summer, data=climDF, span=spanNumber), climDF$yDay.summer)
+  climDF$sd1.lower = predict(loess((TEMP.mean-TEMP.sd)~yDay.summer, data=climDF, span=spanNumber), climDF$yDay.summer)
+  climDF$sd2.upper = predict(loess((TEMP.mean+2*TEMP.sd)~yDay.summer, data=climDF, span=spanNumber), climDF$yDay.summer)
+  climDF$sd2.lower = predict(loess((TEMP.mean-2*TEMP.sd)~yDay.summer, data=climDF, span=spanNumber), climDF$yDay.summer)
+  climDF$sd3.upper = predict(loess((TEMP.mean+3*TEMP.sd)~yDay.summer, data=climDF, span=spanNumber), climDF$yDay.summer)
+  climDF$sd3.lower = predict(loess((TEMP.mean-3*TEMP.sd)~yDay.summer, data=climDF, span=spanNumber), climDF$yDay.summer)
+  return(climDF)
+}
+
+
+############
+## SOURCES
+## modify to your local settings
+############
+baseDir = "./data/wavebuoys/"
+metadataDir = "./metadata/"
+loggerDayDir = "./data/wavebuoys/bySite/Day"
+loggerHourDir = "./data/wavebuoys/bySite/Hour"
+climatologyDir = "./climatology/"
+climatologySSTAARSDir = "./climatology/SSTAARS"
+DHWDir = "./DHW/"
+
+
+```
+
+
+```{r readdata}
+## read global metadata which is more complete
+## I should change all to read this file instead
+globalMD = suppressMessages(read_csv(file.path(baseDir, "global_waveriders_METADATA.csv")))
+
+siteId.list = globalMD$SITE_ID
+if (!siteID.selected %in% siteId.list){
+  stop(paste0(paste0(siteId.list, collapse = ","), "\nERROR: WRONG SITE ID. ---> ", siteID.selected))
+}
+
+globalMD = globalMD %>% filter(SITE_ID==siteID.selected)
+globalMD$LATITUDE = round(globalMD$LATITUDE, 4)
+globalMD$LONGITUDE = round(globalMD$LONGITUDE, 4)
+
+## read day and hourly data
+wtemp.hour = suppressMessages((read_csv(file.path(loggerHourDir, globalMD$FILE_DATA), col_types = "icTnnnnnn")))
+wtemp.day = suppressMessages((read_csv(file.path(loggerDayDir, globalMD$FILE_DATA), col_types = "icTnnnnnnnn")))
+
+## fix the name of the time variable
+colnames(wtemp.day) = gsub("Day", "Time", colnames(wtemp.day))
+colnames(wtemp.hour) = gsub("Hour", "Time", colnames(wtemp.hour))
+
+## Fill time gaps
+wtemp.hour = wtemp.hour %>% filter(!is.na(dateTime)) %>%
+  arrange(dateTime) %>% fillTimeGaps(interval = "hours")
+wtemp.day = wtemp.day %>% filter(!is.na(dateTime)) %>%
+  arrange(dateTime) %>% fillTimeGaps(interval = "days")
+
+## add day of the Year and day of the summer
+summerDays = shiftSummer(wtemp.hour$dateTime)
+wtemp.hour$yDay = yday(wtemp.hour$dateTime)
+wtemp.hour$yDay.summer = summerDays$yDay.shifted
+wtemp.hour$year.summer = summerDays$year.shifted
+
+summerDays = shiftSummer(wtemp.day$dateTime)
+wtemp.day$yDay = yday(wtemp.day$dateTime)
+wtemp.day$yDay.summer = summerDays$yDay.shifted
+wtemp.day$year.summer = summerDays$year.shifted
+
+
+## get SSTAARS climatology
+climSSTAARSmetadata = suppressMessages(read_csv(file.path(climatologySSTAARSDir, "waveriders_climatology_SSTAARS_METADATA.csv")))
+SSTAARS.fileName = climSSTAARSmetadata$climFileName[climSSTAARSmetadata$SITE_ID==siteID.selected]
+climSSTAARS = suppressMessages(read_csv(file.path(climatologySSTAARSDir, SSTAARS.fileName)))
+climSSTAARS$yDay.summer = shiftSummer.day(climSSTAARS$yDay)
+
+
+
+## get min/max temp for plot scales. Add 2 deg to be safe
+Temp.scale.min = floor(min(min(wtemp.hour$TEMP, na.rm=T),
+                           min(climSSTAARS$TEMP), na.rm=T)) - 2
+
+Temp.scale.max = ceiling(max(max(wtemp.hour$TEMP, na.rm=T),
+                          max(climSSTAARS$TEMP),na.rm=T)) + 2
+
+## get DHW and MMM
+DHW = suppressMessages(read_csv(file.path(DHWDir, "WaveRiderSITE_MMM.csv")))
+DHW = DHW %>% filter(SITE_ID==siteID.selected)
+
+
+```
+
+
+
+
+CLIMATOLOGY
+=====================================
+
+Row (data-hight=300)
+-------------------------------------
+
+### Location
+
+```{r}
+
+## read map QLD_towns
+QLDtowns = read.csv(file.path(metadataDir, "QLD_towns.csv"))
+
+lat.mean = globalMD$LATITUDE
+lon.mean = globalMD$LONGITUDE
+siteName = globalMD$SITE
+
+m = leaflet() %>%
+  addProviderTiles(providers$Esri.WorldImagery) %>% setView(lng = lon.mean, lat = lat.mean, zoom = 8) %>%
+  addCircleMarkers(lat=lat.mean, lng=lon.mean, label = siteName,
+                   radius = 8, fillColor = "#791e89", fillOpacity = 0.7, color = "white", weight = 2) %>%
+    addCircleMarkers(data=QLDtowns, lat = ~lat, lng = ~lng, label = ~NAME,
+                   labelOptions = labelOptions(noHide = T, textOnly = TRUE, style= list(color="white", "font-size" = "12px")),
+                   radius = 4, fillColor = "black", fillOpacity = 0.7, color = "white", weight = 1)
+
+m
+```
+
+
+### Basic statistics of the Time Series
+
+
+```{r}
+### make summary statistics table
+## get the max TEMP.q95
+tempq95.summer.max = round(quantile(wtemp.hour$TEMP[wtemp.hour$yDay<=120], 0.95, na.rm=T), 2)
+tempmax.summer.2016 = round(max(wtemp.hour$TEMP[wtemp.hour$yDay<=120 & year(wtemp.hour$dateTime)==2016], na.rm=T), 2)
+tempmax.summer.2017 = round(max(wtemp.hour$TEMP[wtemp.hour$yDay<=120 & year(wtemp.hour$dateTime)==2017], na.rm=T), 2)
+Tempsummer.maxmean = quantile(wtemp.hour$TEMP[wtemp.hour$yDay<=120], 0.95, na.rm=T)
+availableYears = seqToHumanReadable(paste0(unique(year(wtemp.day$dateTime), collapse=",")))
+availableDepths = globalMD$NOMINAL_DEPTH_AVAILABLE
+
+tableList = list(c("SITE", globalMD$SITE),
+                 c("TYPE", "WAVEBUOY"),
+                 c("Longitude (E)", as.character(round(globalMD$LONGITUDE, 4))),
+                 c("Latitude (N)", as.character(round(globalMD$LATITUDE, 4))),
+                 c("START date", as.character(globalMD$DATE_START)),
+                 c("END date", as.character(globalMD$DATE_END)),
+                 c("Available Years", availableYears),
+                 c("Water Depth (m)", availableDepths),
+                 c("Historical summer TEMP (p95%) (°C)", as.character(tempq95.summer.max)),
+                 c("2016 summer max TEMP (°C)", as.character(tempmax.summer.2016)),
+                 c("2017 summer max TEMP (°C)", as.character(tempmax.summer.2017)),
+                 c("NOAAs MMM (°C)", round(DHW$MMM, 2)),
+                 c("2016 NOAAs max DHW (degrees-week)", round(DHW$DHWmax2016, 2)),
+                 c("2017 NOAAs max DHW (degrees-week)", round(DHW$DHWmax2017, 2)))
+
+
+statsTable = data.frame(Item = character(),
+                        Value = character(),
+                        stringsAsFactors = FALSE)
+for (item in 1: length(tableList)){
+  statsTable = bind_rows(statsTable,
+                         data.frame(Item = tableList[[item]][[1]],
+                                    Value = tableList[[item]][[2]],
+                                    stringsAsFactors = FALSE))
+}
+
+DT::datatable(statsTable, colnames=c("", ""), caption = tags$h2(paste0(globalMD$SITE, " -- Wave Buoy")),
+              options = list(pageLength = 6, dom = 'tip'), rownames = FALSE, fillContainer = T, style = "bootstrap")
+
+
+```
+
+
+
+
+
+### Description
+
+
+Mass coral bleaching has occurred on the Great Barrier Reef (GBR) in 2016 and 2017 as part of global bleaching event that started in late 2014 and lasted until late 2017 (NOAA).  This has meant large areas  of coral throughout the GBR have bleached to some degree of severity, depending the duration and extreme temperature stress above the historical summer maximum temperature for each location. This collection seeks to provide a central location from which publicly available temperature records can be viewed and downloaded.
+
+The Queensland Government maintain a network of coastal wave monitoring sites to measure the height and direction of waves along the Queensland coast. The wave buoys also register temperature at the depth of the instrument.
+
+For more details go to [Queensland Government Wave Monitoring site](https://www.qld.gov.au/environment/coasts-waterways/beach/monitoring)
+
+
+Data source:  [Wave Monitoring Data site](https://www.qld.gov.au/environment/coasts-waterways/beach/monitoring/waves-sites)
+
+
+Go back to
+
+[Drivers of Bleaching on the Great Barrier Reef - Compilation of temperature data from 2015-2017](https://eatlas.org.au/gbr/nesp-twq-4-2-temperature-data-2015-17)
+
+
+Row
+-------------------------------------
+
+### Historical summer mean Temperature
+
+```{r}
+valueBox(value=round(mean(wtemp.day$TEMP[wtemp.day$yDay<=120], na.rm=T) ,1), icon="fa-thermometer-half", color = "#335b84")
+```
+
+### Historial summer Maximum 95% percentile
+
+```{r}
+#hist.max.date = wtemp.day$dateTime[which.max(wtemp.day$TEMP.q95)]
+Tempsummer.maxmean = round(quantile(wtemp.day$TEMP[wtemp.day$yDay<=120], 0.95, na.rm=T), 1)
+valueBox(value = Tempsummer.maxmean, icon = "fa-thermometer-three-quarters", color = "#335b84")
+```
+
+### Climatological summer max (SSTAARS)
+
+```{r}
+clim.summer.max = round(max(climSSTAARS$TEMP[climSSTAARS$yDay<=120]),1)
+valueBox(value=clim.summer.max, icon="fa-thermometer-three-quarters", color = "#335b84")
+```
+
+### Climatological summer mean (SSTAARS)
+
+```{r}
+clim.summer.mean = round(mean(climSSTAARS$TEMP[climSSTAARS$yDay<=120]), 1)
+valueBox(value=clim.summer.mean, icon="fa-thermometer-half", color = "#335b84")
+```
+
+### 2016: Days above summer max
+
+```{r}
+daysBelowMean = sum(climSSTAARS$TEMP[climSSTAARS$yDay<=120]<mean(climSSTAARS$TEMP[climSSTAARS$yDay<=120]))
+daysAboveMean = sum(climSSTAARS$TEMP[climSSTAARS$yDay<=120]>=mean(climSSTAARS$TEMP[climSSTAARS$yDay<=120]))
+days2016 = wtemp.day %>% filter(year.summer==2016) %>% group_by(yDay.summer) %>%
+  summarise(TEMP = mean(TEMP, na.rm=T))
+
+daysAboveMax.2016 = sum(days2016$TEMP > clim.summer.max, na.rm=T)
+gauge(value = daysAboveMax.2016, min = 0, max = 120,
+      gaugeSectors(success = c(0, daysBelowMean), danger = c(daysBelowMean+1, daysAboveMean)))
+
+```
+
+### 2017: Days above summer max
+
+```{r}
+days2017 = wtemp.day %>% filter(year.summer==2017) %>% group_by(yDay.summer) %>%
+  summarise(TEMP = mean(TEMP, na.rm=T))
+
+daysAboveMax.2017 = sum(days2017$TEMP > clim.summer.max, na.rm=T)
+gauge(value = daysAboveMax.2017, min = 0, max = 120,
+      gaugeSectors(success = c(0, daysBelowMean), danger = c(daysBelowMean+1, daysAboveMean)))
+
+```
+
+
+
+
+
+Row
+---------------------------------------
+
+### 2016/2017
+
+
+```{r plotconst}
+yearsToPlot = c(2015, 2016, 2017)
+colorValues = c( "steelblue", "#fc8d59", "#d73027")
+colorLabels = c("2014-2015", "2015-2016", "2016-2017")
+
+```
+
+```{r}
+seriesColor.labels = character()
+seriesColor.values = character()
+yearsAvailable = unique(wtemp.day$year.summer)
+
+if (length(yearsAvailable)==0){
+  ## no data available
+  seriesColor.labels = c(seriesColor.labels, "SSTAARS Clim")
+  seriesColor.values = c(seriesColor.values, "blue4")
+
+  pp = ggplot()
+  pp = pp + geom_line(data=climSSTAARS, aes(yDay.summer, TEMP, colour="SSTAARS Clim")) +
+    annotate("text", x = 200, y = (Temp.scale.min + Temp.scale.max)/2, label = "NO WAVE BOUY DATA AVAILABLE FOR 2015-2017")
+} else {
+  pp = ggplot()
+  ## add SSTAARS climatology
+  pp = pp + geom_line(data=climSSTAARS, aes(yDay.summer, TEMP, colour="SSTAARS Clim"))
+  seriesColor.labels = c(seriesColor.labels, "SSTAARS Clim")
+  seriesColor.values = c(seriesColor.values, "blue4")
+
+  ## add series
+  if (2015 %in% yearsAvailable){
+    pp = pp + geom_line(data = wtemp.day %>% filter(year.summer==2015), aes(yDay.summer, TEMP, colour="2014-2015"), size=1, alpha=0.7)
+      seriesColor.labels = c(seriesColor.labels, "2015")
+      seriesColor.values = c(seriesColor.values, "steelblue")
+  }
+  if (2016 %in% yearsAvailable){
+    pp = pp + geom_line(data = wtemp.day %>% filter(year.summer==2016), aes(yDay.summer, TEMP, colour="2015-2016"), size=1, alpha=0.7)
+    seriesColor.labels = c(seriesColor.labels, "2016")
+    seriesColor.values = c(seriesColor.values, "#fc8d59")
+  }
+  if (2017 %in% yearsAvailable){
+    pp = pp + geom_line(data = wtemp.day %>% filter(year.summer==2017), aes(yDay.summer, TEMP, colour="2016-2017"), size=1, alpha=0.7)
+    seriesColor.labels = c(seriesColor.labels, "2017")
+    seriesColor.values = c(seriesColor.values, "#d73027")
+  }
+}
+## layout
+pp = pp + labs(x="", y="Temperature °C") +
+  ylim(Temp.scale.min, Temp.scale.max) +
+  scale_color_manual(values = rev(seriesColor.values),
+                     labels = rev(seriesColor.labels), aesthetics = "color") +
+  theme_pubclean() +
+  theme(legend.title = element_blank())
+pp = ggplotly(pp)
+pp = tidyPlotly(pp)
+pp
+
+```
+
+
+
+Row
+----------------------------------------
+
+### Comments
+
+The time series corresponding to 2015, 2016 and 2017, when available, are plotted in its climatological year, starting at October 1st of the previous year and ending September 30 of its year. For example, the 2016 time series starts at 2015-10-01 and ends 2016-09-30.
+
+The default climatology is the one extracted for the site's coordinates from the SST Atlas of Australian Regional Seas (SSTAARS) (see [Wijffels et al. 2018](http://epubs.aims.gov.au/handle/11068/14860)), at a spatial resolution of ~2km.
+
+The maximun temperature reported in the value Box is the maximum value of the 95% percentile of the day. This quantile avoids the effect of over-heating due to an occasional exposure to the air.
+
+
+
+
+
+
+
+
+TIME SERIES
+=========================================
+
+Row
+-----------------------------------------
+
+### `r globalMD$SITE`
+
+```{r}
+
+fig = plot_ly(x=~wtemp.hour$dateTime, y=~wtemp.hour$TEMP, mode='lines', type="scatter",
+              line = list(color = "coral"), name = "Hourly") %>%
+  add_trace(x = ~wtemp.day$dateTime, y= ~wtemp.day$TEMP, type="scatter", mode="lines",
+            line = list(color = "red"), name = "Day mean") %>%
+  layout(
+    title = "",
+    xaxis = list(
+      title="",
+      rangeselector = list(
+        buttons = list(
+          list(
+            count = 3,
+            label = "3 mo",
+            step = "month",
+            stepmode = "backward"),
+          list(
+            count = 6,
+            label = "6 mo",
+            step = "month",
+            stepmode = "backward"),
+          list(
+            count = 1,
+            label = "1 yr",
+            step = "year",
+            stepmode = "backward"),
+          list(step = "all")))),
+        yaxis = list(title = "Temperature (°C)")) %>%
+  rangeslider(start=ymd(20161001), end = ymd(20170930))
+fig = fig %>% config(fig, displaylogo = FALSE)
+
+fig
+
+```
+
+
+Row
+------------------------------------------------
+
+#### Comentary
+
+The time series represents all available records from **`r floor_date(globalMD$DATE_START, "day")`** to **`r floor_date(globalMD$DATE_END, "day")`**. Move the range slider at the bottom of the plot to select or zoom sections of the data. Click on the legend to hide/show any time series.
+
+For more details about this data go to the [Queensland Government Wave Monitoring site](https://www.qld.gov.au/environment/coasts-waterways/beach/monitoring/waves-sites)
+

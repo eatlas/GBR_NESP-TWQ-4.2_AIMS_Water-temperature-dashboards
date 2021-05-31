@@ -1,0 +1,232 @@
+SITE_ID,SITE,SLFL,nYears,yearList,yearRange,summerStart,fileName
+1,Agincourt Reef Number 3,SL,16,"1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011",1996-2011,Oct-01,AgincourtReefNumber3_clim-SL.csv
+1,Agincourt Reef Number 3,FL,10,"1996, 1997, 1998, 1999, 2003, 2004, 2005, 2006, 2007, 2008","1996-1999, 2003-2008",Oct-01,AgincourtReefNumber3_clim-FL.csv
+3,Cleveland Bay,WS,5,"2004, 2005, 2006, 2007, 2008",2004-2008,Oct-01,NoClimData
+4,Davies Reef,WS,13,"1999, 2000, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012","1999, 2000, 2002-2012",Oct-01,DaviesReef_clim-WS.csv
+4,Davies Reef,SL,15,"1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2012","1996-2009, 2012",Oct-01,DaviesReef_clim-SL.csv
+4,Davies Reef,FL,14,"1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2012","1997-2009, 2012",Oct-01,DaviesReef_clim-FL.csv
+4,Davies Reef,CH,0,,,Oct-01,NoClimData
+6,Hardy Reef,WS,1,2002,2002,Oct-01,NoClimData
+7,Myrmidon Reef,SL,18,"1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012",1995-2012,Oct-01,MyrmidonReef_clim-SL.csv
+7,Myrmidon Reef,FL,17,"1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2011, 2012","1995-2009, 2011, 2012",Oct-01,MyrmidonReef_clim-FL.csv
+9,Orpheus Island,FL,2,"2011, 2012","2011, 2012",Oct-01,NoClimData
+9,Orpheus Island,CH,0,,,Oct-01,NoClimData
+742,AIMS Wharf WS,OTH,1,2012,2012,Oct-01,NoClimData
+743,Rib Reef,FL,0,,,Oct-01,NoClimData
+743,Rib Reef,SL,0,,,Oct-01,NoClimData
+743,Rib Reef,CH,0,,,Oct-01,NoClimData
+747,John Brewer,SL,14,"1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2009, 2010","1996-2007, 2009, 2010",Oct-01,JohnBrewer_clim-SL.csv
+747,John Brewer,FL,13,"1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2007, 2008, 2009, 2010, 2011","1998-2005, 2007-2011",Oct-01,JohnBrewer_clim-FL.csv
+747,John Brewer,CH,0,,,Oct-01,NoClimData
+856,Cattle Bay,FL,20,"1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012",1993-2012,Oct-01,CattleBay_clim-FL.csv
+856,Cattle Bay,SL,19,"1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012","1993-2000, 2002-2012",Oct-01,CattleBay_clim-SL.csv
+857,Raine Island,FL,9,"1996, 1997, 1998, 2002, 2003, 2004, 2006, 2007, 2012","1996-1998, 2002-2004, 2006, 2007, 2012",Oct-01,NoClimData
+857,Raine Island,SL,10,"1995, 1996, 1997, 1998, 2006, 2007, 2008, 2009, 2011, 2012","1995-1998, 2006-2009, 2011, 2012",Oct-01,RaineIsland_clim-SL.csv
+858,Tydeman Cay,SL,15,"1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2011, 2012","1996-2008, 2011, 2012",Oct-01,TydemanCay_clim-SL.csv
+858,Tydeman Cay,FL,0,,,Oct-01,NoClimData
+859,Coconut Beach Reef,SL,12,"1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007",1996-2007,Oct-01,CoconutBeachReef_clim-SL.csv
+859,Coconut Beach Reef,FL,13,"1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008",1996-2008,Oct-01,CoconutBeachReef_clim-FL.csv
+860,Black Rocks Reef,SL,12,"1995, 1996, 1997, 1998, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007","1995-1998, 2000-2007",Oct-01,BlackRocksReef_clim-SL.csv
+860,Black Rocks Reef,FL,13,"1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007",1995-2007,Oct-01,BlackRocksReef_clim-FL.csv
+863,Kelso Reef,SL,18,"1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012",1995-2012,Oct-01,KelsoReef_clim-SL.csv
+863,Kelso Reef,FL,18,"1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012",1995-2012,Oct-01,KelsoReef_clim-FL.csv
+865,Hayman Island,FL,13,"1996, 1997, 1998, 1999, 2000, 2001, 2002, 2005, 2006, 2007, 2008, 2010, 2011","1996-2002, 2005-2008, 2010, 2011",Oct-01,HaymanIsland_clim-FL.csv
+865,Hayman Island,SL,12,"1996, 1998, 1999, 2000, 2001, 2005, 2006, 2007, 2008, 2010, 2011, 2012","1996, 1998-2001, 2005-2008, 2010-2012",Oct-01,HaymanIsland_clim-SL.csv
+866,Daydream Island,FL,15,"1996, 1997, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2011, 2012","1996, 1997, 1999-2009, 2011, 2012",Oct-01,DaydreamIsland_clim-FL.csv
+866,Daydream Island,SL,17,"1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012",1996-2012,Oct-01,DaydreamIsland_clim-SL.csv
+867,Pioneer Bay,SL,17,"1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2010, 2011","1992-2006, 2010, 2011",Oct-01,PioneerBay_clim-SL.csv
+868,Pelorus Island,SL,13,"1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2010, 2011, 2012","1993-2002, 2010-2012",Oct-01,PelorusIsland_clim-SL.csv
+868,Pelorus Island,FL,13,"1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2010, 2011, 2012","1993-2002, 2010-2012",Oct-01,PelorusIsland_clim-FL.csv
+871,Norman Reef,SL,12,"1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2007, 2008, 2010, 2011","1996-2003, 2007, 2008, 2010, 2011",Oct-01,NormanReef_clim-SL.csv
+871,Norman Reef,FL,11,"1996, 1997, 1998, 1999, 2000, 2001, 2003, 2004, 2005, 2007, 2008","1996-2001, 2003-2005, 2007, 2008",Oct-01,NormanReef_clim-FL.csv
+876,Dip Reef,FL,15,"1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2011","1996-2009, 2011",Oct-01,DipReef_clim-FL.csv
+876,Dip Reef,SL,15,"1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011",1997-2011,Oct-01,DipReef_clim-SL.csv
+879,Florence Bay,FL,17,"1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2006, 2007, 2008, 2009, 2010, 2011, 2012","1995-2004, 2006-2012",Oct-01,FlorenceBay_clim-FL.csv
+893,East Cay,SL,18,"1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012",1995-2012,Oct-01,EastCay_clim-SL.csv
+893,East Cay,FL,15,"1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2010, 2011, 2012","1995-2006, 2010-2012",Oct-01,EastCay_clim-FL.csv
+896,Turner Cay,SL,17,"1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012",1996-2012,Oct-01,TurnerCay_clim-SL.csv
+896,Turner Cay,FL,15,"1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2010, 2011, 2012","1995-2006, 2010-2012",Oct-01,TurnerCay_clim-FL.csv
+898,Wallace Islet,FL,13,"1997, 1998, 1999, 2000, 2001, 2002, 2003, 2005, 2006, 2007, 2008, 2011, 2012","1997-2003, 2005-2008, 2011, 2012",Oct-01,WallaceIslet_clim-FL.csv
+898,Wallace Islet,SL,11,"1996, 1997, 1998, 1999, 2000, 2001, 2002, 2006, 2007, 2011, 2012","1996-2002, 2006, 2007, 2011, 2012",Oct-01,WallaceIslet_clim-SL.csv
+902,"Green Island, Qld",SL,13,"1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2012","1997-2008, 2012",Oct-01,GreenIslandQld_clim-SL.csv
+902,"Green Island, Qld",FL,13,"1996, 1997, 1998, 1999, 2000, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009","1996-2000, 2002-2009",Oct-01,GreenIslandQld_clim-FL.csv
+904,Hay Point,SL,6,"1999, 2000, 2001, 2002, 2005, 2006","1999-2002, 2005, 2006",Oct-01,NoClimData
+904,Hay Point,FL,4,"1998, 1999, 2001, 2002","1998, 1999, 2001, 2002",Oct-01,NoClimData
+905,Abbott Point,SL,11,"1998, 1999, 2000, 2001, 2002, 2005, 2006, 2007, 2008, 2009, 2010","1998-2002, 2005-2010",Oct-01,AbbottPoint_clim-SL.csv
+905,Abbott Point,FL,10,"1998, 1999, 2000, 2001, 2002, 2003, 2005, 2008, 2009, 2010","1998-2003, 2005, 2008-2010",Oct-01,AbbottPoint_clim-FL.csv
+907,Lucinda,SL,11,"1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008",1998-2008,Oct-01,Lucinda_clim-SL.csv
+907,Lucinda,FL,11,"1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008",1998-2008,Oct-01,Lucinda_clim-FL.csv
+910,Night Island,FL,16,"1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2011, 2012","1996-2009, 2011, 2012",Oct-01,NightIsland_clim-FL.csv
+910,Night Island,SL,12,"1996, 1997, 1998, 1999, 2000, 2001, 2002, 2007, 2008, 2009, 2011, 2012","1996-2002, 2007-2009, 2011, 2012",Oct-01,NightIsland_clim-SL.csv
+913,Sand Bank No7,SL,16,"1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2011, 2012","1996-2009, 2011, 2012",Oct-01,SandBankNo7_clim-SL.csv
+913,Sand Bank No7,FL,0,,,Oct-01,NoClimData
+915,Low Isles,SL,16,"1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011",1996-2011,Oct-01,LowIsles_clim-SL.csv
+915,Low Isles,FL,14,"1996, 1997, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010","1996, 1997, 1999-2010",Oct-01,LowIsles_clim-FL.csv
+919,Mourilyan,SL,11,"1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008",1998-2008,Oct-01,Mourilyan_clim-SL.csv
+919,Mourilyan,FL,10,"1998, 1999, 2000, 2001, 2002, 2003, 2004, 2006, 2007, 2008","1998-2004, 2006-2008",Oct-01,Mourilyan_clim-FL.csv
+923,Geoffrey Bay,SL,18,"1991, 1992, 1993, 1994, 1995, 1996, 1999, 2000, 2001, 2002, 2003, 2005, 2006, 2007, 2008, 2010, 2011, 2012","1991-1996, 1999-2003, 2005-2008, 2010-2012",Oct-01,GeoffreyBay_clim-SL.csv
+923,Geoffrey Bay,FL,20,"1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011",1992-2011,Oct-01,GeoffreyBay_clim-FL.csv
+924,Nelly Bay,FL,16,"1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2007, 2008, 2009, 2010, 2011, 2012","1996-2005, 2007-2012",Oct-01,NellyBay_clim-FL.csv
+924,Nelly Bay,SL,15,"1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2007, 2008, 2010, 2011, 2012","1996-2005, 2007, 2008, 2010-2012",Oct-01,NellyBay_clim-SL.csv
+926,Middle Reef,SL,17,"1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012",1996-2012,Oct-01,MiddleReef_clim-SL.csv
+929,Cape Flattery,FL,11,"1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008",1998-2008,Oct-01,CapeFlattery_clim-FL.csv
+931,Moore Reef,SL,11,"1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2006, 2007, 2008","1997-2004, 2006-2008",Oct-01,MooreReef_clim-SL.csv
+931,Moore Reef,FL,12,"1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008",1997-2008,Oct-01,MooreReef_clim-FL.csv
+933,Osprey Reef,SL,12,"1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009",1998-2009,Oct-01,OspreyReef_clim-SL.csv
+942,Arlington Reef,FL,15,"1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2011, 2012","1996-2008, 2011, 2012",Oct-01,ArlingtonReef_clim-FL.csv
+942,Arlington Reef,SL,13,"1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2006, 2007, 2008, 2012","1996-2004, 2006-2008, 2012",Oct-01,ArlingtonReef_clim-SL.csv
+963,21-583 Reef,FL,2,"1995, 1996","1995, 1996",Oct-01,NoClimData
+963,21-583 Reef,SL,2,"1995, 1996","1995, 1996",Oct-01,NoClimData
+981,North East Herald Cay,FL,6,"2003, 2004, 2005, 2006, 2007, 2008",2003-2008,Oct-01,NoClimData
+986,Pine Island,SL,8,"2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012",2005-2012,Oct-01,NoClimData
+986,Pine Island,FL,6,"2005, 2006, 2007, 2008, 2009, 2012","2005-2009, 2012",Oct-01,NoClimData
+988,Double Cone,SL,7,"2005, 2006, 2007, 2008, 2010, 2011, 2012","2005-2008, 2010-2012",Oct-01,NoClimData
+988,Double Cone,FL,4,"2005, 2006, 2007, 2012","2005-2007, 2012",Oct-01,NoClimData
+990,Seaforth Island,SL,7,"2005, 2006, 2007, 2008, 2009, 2011, 2012","2005-2009, 2011, 2012",Oct-01,NoClimData
+990,Seaforth Island,FL,7,"2005, 2006, 2007, 2008, 2009, 2011, 2012","2005-2009, 2011, 2012",Oct-01,NoClimData
+992,Dent Island,SL,7,"2005, 2006, 2007, 2008, 2009, 2011, 2012","2005-2009, 2011, 2012",Oct-01,NoClimData
+992,Dent Island,FL,7,"2005, 2006, 2007, 2008, 2009, 2011, 2012","2005-2009, 2011, 2012",Oct-01,NoClimData
+994,Wilkie Island,SL,7,"2004, 2005, 2006, 2007, 2008, 2011, 2012","2004-2008, 2011, 2012",Oct-01,NoClimData
+994,Wilkie Island,FL,7,"2004, 2005, 2006, 2007, 2008, 2011, 2012","2004-2008, 2011, 2012",Oct-01,NoClimData
+996,NE Lihou Reef (Turtle Islet),FL,5,"2004, 2005, 2006, 2007, 2008",2004-2008,Oct-01,NoClimData
+1001,Yonge Reef,FL,2,"2006, 2007","2006, 2007",Oct-01,NoClimData
+1001,Yonge Reef,SL,2,"2006, 2007","2006, 2007",Oct-01,NoClimData
+1005,Dunk Island,SL,9,"2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012",2004-2012,Oct-01,NoClimData
+1005,Dunk Island,FL,7,"2004, 2005, 2006, 2007, 2008, 2009, 2012","2004-2009, 2012",Oct-01,NoClimData
+1007,Nth Barnards (Jesse Is),SL,7,"2005, 2006, 2007, 2008, 2009, 2011, 2012","2005-2009, 2011, 2012",Oct-01,NoClimData
+1007,Nth Barnards (Jesse Is),FL,7,"2005, 2006, 2007, 2008, 2009, 2011, 2012","2005-2009, 2011, 2012",Oct-01,NoClimData
+1009,High Island,FL,9,"2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012",2004-2012,Oct-01,NoClimData
+1009,High Island,SL,8,"2004, 2005, 2006, 2008, 2009, 2010, 2011, 2012","2004-2006, 2008-2012",Oct-01,NoClimData
+1011,Fitzroy Island,SL,10,"1996, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012","1996, 2004-2012",Oct-01,FitzroyIsland_clim-SL.csv
+1011,Fitzroy Island,FL,9,"2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012",2004-2012,Oct-01,NoClimData
+1013,Frankland Islands,FL,7,"1998, 1999, 2005, 2006, 2007, 2008, 2012","1998, 1999, 2005-2008, 2012",Oct-01,NoClimData
+1013,Frankland Islands,SL,10,"1998, 1999, 2004, 2005, 2006, 2007, 2008, 2010, 2011, 2012","1998, 1999, 2004-2008, 2010-2012",Oct-01,FranklandIslands_clim-SL.csv
+1021,South West Herald Cay,FL,1,2006,2006,Oct-01,NoClimData
+1032,Willis Island,FL,6,"2006, 2007, 2008, 2010, 2011, 2012","2006-2008, 2010-2012",Oct-01,NoClimData
+1037,Pandora Reef,SL,6,"2007, 2008, 2009, 2010, 2011, 2012",2007-2012,Oct-01,NoClimData
+1037,Pandora Reef,FL,5,"2007, 2008, 2009, 2011, 2012","2007-2009, 2011, 2012",Oct-01,NoClimData
+1037,Pandora Reef,CH,0,,,Oct-01,NoClimData
+1045,Snapper Island North,FL,6,"2007, 2008, 2009, 2010, 2011, 2012",2007-2012,Oct-01,NoClimData
+1045,Snapper Island North,SL,6,"2007, 2008, 2009, 2010, 2011, 2012",2007-2012,Oct-01,NoClimData
+1047,Chicken Reef,SL,17,"1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012",1996-2012,Oct-01,ChickenReef_clim-SL.csv
+1047,Chicken Reef,FL,17,"1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012",1996-2012,Oct-01,ChickenReef_clim-FL.csv
+1057,Hook Island,SL,3,"2007, 2008, 2012","2007, 2008, 2012",Oct-01,NoClimData
+1057,Hook Island,FL,3,"2007, 2008, 2012","2007, 2008, 2012",Oct-01,NoClimData
+1058,Shute and Tancred Islands,FL,5,"2007, 2008, 2009, 2010, 2012","2007-2010, 2012",Oct-01,NoClimData
+1058,Shute and Tancred Islands,SL,3,"2007, 2008, 2012","2007, 2008, 2012",Oct-01,NoClimData
+1059,King Reef,FL,3,"2008, 2009, 2010",2008-2010,Oct-01,NoClimData
+1059,King Reef,SL,5,"2007, 2008, 2010, 2011, 2012","2007, 2008, 2010-2012",Oct-01,NoClimData
+1060,Northeast Reef,FL,5,"2008, 2009, 2010, 2011, 2012",2008-2012,Oct-01,NoClimData
+1060,Northeast Reef,SL,7,"2002, 2003, 2004, 2005, 2008, 2011, 2012","2002-2005, 2008, 2011, 2012",Oct-01,NoClimData
+1061,Goble Reef,FL,2,"2006, 2007","2006, 2007",Oct-01,NoClimData
+1061,Goble Reef,SL,3,"2006, 2007, 2008",2006-2008,Oct-01,NoClimData
+1062,20-344 Reef,FL,3,"2006, 2007, 2008",2006-2008,Oct-01,NoClimData
+1062,20-344 Reef,SL,5,"2006, 2007, 2008, 2010, 2011","2006-2008, 2010, 2011",Oct-01,NoClimData
+1066,Lady Elliot Reef,SL,4,"2006, 2007, 2008, 2012","2006-2008, 2012",Oct-01,NoClimData
+1066,Lady Elliot Reef,FL,3,"2006, 2007, 2008",2006-2008,Oct-01,NoClimData
+1070,Flinders Reef,FL,4,"2007, 2008, 2010, 2012","2007, 2008, 2010, 2012",Oct-01,NoClimData
+1075,Havannah Island,FL,3,"2007, 2008, 2009",2007-2009,Oct-01,NoClimData
+1075,Havannah Island,SL,5,"2007, 2008, 2009, 2011, 2012","2007-2009, 2011, 2012",Oct-01,NoClimData
+1121,Marion Reef,FL,2,"2009, 2010","2009, 2010",Oct-01,NoClimData
+1122,Holmes Reef,FL,4,"2009, 2010, 2011, 2012",2009-2012,Oct-01,NoClimData
+1123,Bougainville Reef,FL,2,"2009, 2010","2009, 2010",Oct-01,NoClimData
+1125,Elusive Reef,FL,4,"2008, 2010, 2011, 2012","2008, 2010-2012",Oct-01,NoClimData
+1125,Elusive Reef,SL,4,"2008, 2010, 2011, 2012","2008, 2010-2012",Oct-01,NoClimData
+1166,Lizard Island,FL,16,"1995, 1996, 1997, 1998, 1999, 2000, 2002, 2003, 2004, 2005, 2007, 2008, 2009, 2010, 2011, 2012","1995-2000, 2002-2005, 2007-2012",Oct-01,LizardIsland_clim-FL.csv
+1166,Lizard Island,SL,16,"1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2012","1996-2010, 2012",Oct-01,LizardIsland_clim-SL.csv
+1995,Linnet Reef,FL,0,,,Oct-01,NoClimData
+1995,Linnet Reef,SL,0,,,Oct-01,NoClimData
+1996,North Direction Island,FL,3,"2010, 2011, 2012",2010-2012,Oct-01,NoClimData
+1996,North Direction Island,SL,3,"2010, 2011, 2012",2010-2012,Oct-01,NoClimData
+2015,Thetford Reef,FL,0,,,Oct-01,NoClimData
+2015,Thetford Reef,SL,2,"2011, 2012","2011, 2012",Oct-01,NoClimData
+2256,Chinaman Reef,FL,0,,,Oct-01,NoClimData
+2256,Chinaman Reef,SL,1,2012,2012,Oct-01,NoClimData
+2257,Snake Reef,SL,3,"2010, 2011, 2012",2010-2012,Oct-01,NoClimData
+2257,Snake Reef,FL,0,,,Oct-01,NoClimData
+2295,Cherepo,FL,0,,,Oct-01,NoClimData
+2560,19-131 Reef,FL,0,,,Oct-01,NoClimData
+2560,19-131 Reef,SL,2,"2011, 2012","2011, 2012",Oct-01,NoClimData
+2561,19-138 Reef,FL,0,,,Oct-01,NoClimData
+2561,19-138 Reef,SL,2,"2011, 2012","2011, 2012",Oct-01,NoClimData
+2562,19-159 Reef,FL,0,,,Oct-01,NoClimData
+2562,19-159 Reef,SL,2,"2011, 2012","2011, 2012",Oct-01,NoClimData
+2563,Hyde Reef,FL,2,"2011, 2012","2011, 2012",Oct-01,NoClimData
+2563,Hyde Reef,SL,2,"2011, 2012","2011, 2012",Oct-01,NoClimData
+2564,20-104 Reef,FL,0,,,Oct-01,NoClimData
+2565,Langford Island,FL,2,"2011, 2012","2011, 2012",Oct-01,NoClimData
+2565,Langford Island,SL,2,"2011, 2012","2011, 2012",Oct-01,NoClimData
+2566,Rebe Reef,FL,2,"2011, 2012","2011, 2012",Oct-01,NoClimData
+2566,Rebe Reef,SL,2,"2011, 2012","2011, 2012",Oct-01,NoClimData
+2567,Border Island,FL,0,,,Oct-01,NoClimData
+2567,Border Island,SL,2,"2011, 2012","2011, 2012",Oct-01,NoClimData
+2681,Small Lagoon Reef,FL,0,,,Oct-01,NoClimData
+2681,Small Lagoon Reef,SL,0,,,Oct-01,NoClimData
+2682,21-245 Reef,SL,2,"2011, 2012","2011, 2012",Oct-01,NoClimData
+2682,21-245 Reef,FL,0,,,Oct-01,NoClimData
+2683,21-278 Reef,SL,2,"2011, 2012","2011, 2012",Oct-01,NoClimData
+2684,21-296 Reef,SL,0,,,Oct-01,NoClimData
+2685,21-062 Reef,FL,0,,,Oct-01,NoClimData
+2685,21-062 Reef,SL,0,,,Oct-01,NoClimData
+2686,21-139 Reef,FL,0,,,Oct-01,NoClimData
+2686,21-139 Reef,SL,0,,,Oct-01,NoClimData
+2687,21-187 Reef,FL,0,,,Oct-01,NoClimData
+2687,21-187 Reef,SL,0,,,Oct-01,NoClimData
+2688,Mackay Reef,FL,0,,,Oct-01,NoClimData
+2688,Mackay Reef,SL,0,,,Oct-01,NoClimData
+2689,St Crispin Reef,FL,0,,,Oct-01,NoClimData
+2689,St Crispin Reef,SL,0,,,Oct-01,NoClimData
+2690,Opal Reef,FL,0,,,Oct-01,NoClimData
+2690,Opal Reef,SL,0,,,Oct-01,NoClimData
+2691,Michaelmas Reef,FL,0,,,Oct-01,NoClimData
+2691,Michaelmas Reef,SL,0,,,Oct-01,NoClimData
+2692,Peart Reef,SL,0,,,Oct-01,NoClimData
+2692,Peart Reef,FL,1,2012,2012,Oct-01,NoClimData
+2693,Feather Reef,SL,1,2012,2012,Oct-01,NoClimData
+2693,Feather Reef,FL,1,2012,2012,Oct-01,NoClimData
+2700,Horseshoe Reef,SL,0,,,Oct-01,NoClimData
+2700,Horseshoe Reef,FL,0,,,Oct-01,NoClimData
+2701,Hedley Reef,FL,0,,,Oct-01,NoClimData
+2701,Hedley Reef,SL,1,2012,2012,Oct-01,NoClimData
+2702,McCulloch Reef,SL,0,,,Oct-01,NoClimData
+2703,Farquharson Reef,FL,0,,,Oct-01,NoClimData
+2703,Farquharson Reef,SL,0,,,Oct-01,NoClimData
+2704,Taylor Reef,FL,0,,,Oct-01,NoClimData
+2704,Taylor Reef,SL,0,,,Oct-01,NoClimData
+2705,Roxburgh Reef,SL,1,2012,2012,Oct-01,NoClimData
+2706,Fore And Aft Reef,SL,1,2012,2012,Oct-01,NoClimData
+2706,Fore And Aft Reef,FL,1,2012,2012,Oct-01,NoClimData
+2707,Helix Reef,SL,1,2012,2012,Oct-01,NoClimData
+2707,Helix Reef,FL,0,,,Oct-01,NoClimData
+2708,Grub Reef,SL,1,2012,2012,Oct-01,NoClimData
+2708,Grub Reef,FL,1,2012,2012,Oct-01,NoClimData
+2709,Knife Reef,SL,0,,,Oct-01,NoClimData
+2709,Knife Reef,FL,1,2012,2012,Oct-01,NoClimData
+2710,Centipede Reef,SL,1,2012,2012,Oct-01,NoClimData
+2711,Tern Reef,SL,1,2012,2012,Oct-01,NoClimData
+2711,Tern Reef,FL,0,,,Oct-01,NoClimData
+2712,Pompey Reef,SL,2,"2011, 2012","2011, 2012",Oct-01,NoClimData
+2712,Pompey Reef,FL,0,,,Oct-01,NoClimData
+2713,Penrith Reef,SL,1,2012,2012,Oct-01,NoClimData
+2714,21-591 Reef,SL,1,2012,2012,Oct-01,NoClimData
+2715,21-550 Reef,FL,0,,,Oct-01,NoClimData
+2715,21-550 Reef,SL,0,,,Oct-01,NoClimData
+2760,Gannet Cay Reef,FL,0,,,Oct-01,NoClimData
+2842,Martin,SL,0,,,Oct-01,NoClimData
+2844,No Name,SL,0,,,Oct-01,NoClimData
+3020,Bedarra Island,FL,0,,,Oct-01,NoClimData
+3020,Bedarra Island,SL,0,,,Oct-01,NoClimData
+3123,Hastings Reef,FL,0,,,Oct-01,NoClimData
+3123,Hastings Reef,SL,0,,,Oct-01,NoClimData
+3140,Repulse,SL,0,,,Oct-01,NoClimData
+3340,Holbourne Island East,FL,0,,,Oct-01,NoClimData
+3340,Holbourne Island East,SL,0,,,Oct-01,NoClimData
+3341,Camp Island East,FL,0,,,Oct-01,NoClimData
+3460,Lagoon Reef,FL,0,,,Oct-01,NoClimData
+3460,Lagoon Reef,SL,0,,,Oct-01,NoClimData
+3480,Curd Reef,FL,0,,,Oct-01,NoClimData
+3480,Curd Reef,SL,0,,,Oct-01,NoClimData
+3500,Moore Reef-Coral Sea,FL,0,,,Oct-01,NoClimData
+3500,Moore Reef-Coral Sea,SL,0,,,Oct-01,NoClimData
+3702,Agincourt Reef Number 1,SL,0,,,Oct-01,NoClimData
+3702,Agincourt Reef Number 1,FL,0,,,Oct-01,NoClimData

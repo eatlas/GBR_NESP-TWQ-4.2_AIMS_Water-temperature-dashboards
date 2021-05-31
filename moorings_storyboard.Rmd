@@ -1,0 +1,487 @@
+---
+title: "GBR Temperature Dashboard"
+output:
+  flexdashboard::flex_dashboard:
+    logo: AIMS-NESP.png
+    orientation: rows
+    vertical_layout: scroll
+    theme: cosmo
+    social: [ "menu" ]
+    navbar:
+      - { title: "HOME", href: "https://eatlas.org.au/gbr/nesp-twq-4-2-temperature-data-2015-17", align: right }
+
+params:
+  siteID: 'NRSYON'
+---
+
+<!--
+eklein. eklein@ocean-analytics.com.au
+This is the code for generating the AIMS IMOS moorings TEMP Dashboard
+
+-->
+
+
+
+<style>
+.navbar-inverse {
+  background-color:#335b84;
+  border-color:black;
+}
+.navbar-brand {
+  font-size: x-large;
+  color: white!important;
+}
+.nav-tabs-custom > .nav-tabs > li.active {border-top-color: #335b84}
+}
+</style>
+
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(htmltools)
+library(leaflet)
+library(plotly)
+library(readr)
+library(lubridate)
+library(dplyr)
+library(ggplot2)
+library(ggpubr)
+library(DT)
+library(stringr)
+library(R.utils)
+library(cmocean)
+options(dplyr.summarise.inform = FALSE)
+
+
+
+##############
+## Constants
+##############
+summer.start = 274
+climYear.start = 2015
+climYear.end = 2017
+siteID.selected = "NRSYON"
+##siteID.selected = 856     ## manual selection of a site
+
+
+###############
+## Functions
+###############
+
+tidyPlotly = function(pp){
+  config(pp, displaylogo = FALSE)
+  ## set xscale and fix legend labels
+  pp = plotly_build(pp)
+  #pp$x$layout$xaxis$tickvals = c(1,30,60,90,120,150,180,210,240,270,300, 330, 365)
+  pp$x$layout$xaxis$tickvals = c(1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335)
+  pp$x$layout$xaxis$ticktext = c("OCT","NOV","DEC","JAN", "FEB","MAR","APR","MAY","JUN","JUL","AUG", "SEP", "OCT")
+
+  ## dirty fix of the legend labels
+  for (i in 1:length(pp$x$data)){
+      if (!is.null(pp$x$data[[i]]$name)){
+          pp$x$data[[i]]$name =  gsub("\\(","",str_split(pp$x$data[[i]]$name,",")[[1]][1])
+      }
+  }
+  pp = pp %>% config(pp, displaylogo = FALSE)
+  return(pp)
+}
+
+
+fillTimeGaps = function(df, interval){
+  ## fill the time gaps with NAs
+  df.time = data.frame(dateTime = seq(min(df$dateTime), max(df$dateTime), by=interval))
+  df = full_join(df, df.time, by="dateTime")
+  df = df %>% arrange(dateTime)
+  return(df)
+}
+
+
+shiftSummer = function(dateTime, summer.start=274){
+  ## shift yday relative summer start
+  ## shift the year to match the climatological year start
+  ## default Oct-01
+  yDay.shifted = ifelse(yday(dateTime)<summer.start, yday(dateTime) + (365-summer.start) + 1, yday(dateTime) - summer.start + 1)
+  year.shifted = ifelse(yday(dateTime)>=summer.start, year(dateTime)+1, year(dateTime))
+  return(list(yDay.shifted= yDay.shifted, year.shifted = year.shifted))
+}
+
+shiftSummer.day = function(yDay, summer.start=274){
+  ## shift yday relative summer start
+  ## default Oct-01
+  yDay.shifted = ifelse(yDay<summer.start, yDay + (365-summer.start) + 1, yDay - summer.start + 1)
+  return(yDay.shifted)
+}
+
+addSmoothSD = function(climDF, spanNumber=0.5){
+  ## add smoothed 1,2,3 sd bands to the climatology file
+  ## based on summer yday
+  climDF$sd1.upper = predict(loess((TEMP.mean+TEMP.sd)~yDay.summer, data=climDF, span=spanNumber), climDF$yDay.summer)
+  climDF$sd1.lower = predict(loess((TEMP.mean-TEMP.sd)~yDay.summer, data=climDF, span=spanNumber), climDF$yDay.summer)
+  climDF$sd2.upper = predict(loess((TEMP.mean+2*TEMP.sd)~yDay.summer, data=climDF, span=spanNumber), climDF$yDay.summer)
+  climDF$sd2.lower = predict(loess((TEMP.mean-2*TEMP.sd)~yDay.summer, data=climDF, span=spanNumber), climDF$yDay.summer)
+  climDF$sd3.upper = predict(loess((TEMP.mean+3*TEMP.sd)~yDay.summer, data=climDF, span=spanNumber), climDF$yDay.summer)
+  climDF$sd3.lower = predict(loess((TEMP.mean-3*TEMP.sd)~yDay.summer, data=climDF, span=spanNumber), climDF$yDay.summer)
+  return(climDF)
+}
+
+
+############
+## SOURCES
+## modify to your local settings
+############
+baseDir = "./data/moorings/"
+metadataDir = "./metadata/"
+loggerDayDir = "./data/moorings/bySite/Day"
+loggerHourDir = "./data/moorings/bySite/Hour"
+climatologyDir = "./climatology/"
+climatologySSTAARSDir = "./climatology/SSTAARS"
+DHWDir = "./DHW/"
+
+```
+
+
+```{r}
+## read METADATA
+globalMD = read_csv(file.path(baseDir, "moorings_METADATA.csv"), col_types = cols())
+globalMD = globalMD[globalMD$SITE==siteID.selected,]
+
+
+## read data
+fileList = list.files(file.path(baseDir, siteID.selected))
+TEMP.day = data.frame()
+TEMP.hour = data.frame()
+for (ff in fileList){
+  df = read_csv(file.path(baseDir, siteID.selected, ff), col_types = "nTnc")
+  TEMP.hour = bind_rows(TEMP.hour, df)
+
+  df.day = df %>% group_by(DEPTH, TIME=floor_date(TIME, "day")) %>%
+  summarise(TEMP = mean(TEMP, na.rm=T))
+  ## fill gaprs by DEPTH
+  for (dd in unique(df.day$DEPTH)){
+    df.depth = df.day %>% filter(DEPTH==dd)
+    df.timeSeq = data.frame(TIME = seq(min(df.depth$TIME), max(df.depth$TIME), "days"))
+    df.depth = full_join(df.depth, df.timeSeq, by="TIME")
+    df.depth = df.depth %>% arrange(TIME)
+    TEMP.day = bind_rows(TEMP.day, df.depth)
+  }
+}
+
+## clean the NaNs
+TEMP.day$TEMP[is.nan(TEMP.day$TEMP)] = NA
+TEMP.hour$TEMP[is.nan(TEMP.hour$TEMP)] = NA
+
+TEMP.day$yDay = yday(TEMP.day$TIME)
+TEMP.hour$yDay = yday(TEMP.hour$TIME)
+
+## read map QLD_towns
+QLDtowns = read.csv(file.path(metadataDir, "QLD_towns.csv"))
+
+## temp range
+temp.scale.min = floor(min(TEMP.hour$TEMP, na.rm=T))
+Temp.scale.max = ceiling(max(TEMP.hour$TEMP, na.rm=T))
+
+
+```
+
+
+
+CLIMATOLOGY
+=====================================
+
+Row (data-hight=300)
+-------------------------------------
+
+### Location
+
+```{r}
+
+lat.mean = globalMD$LATITUDE
+lon.mean = globalMD$LONGITUDE
+siteName = globalMD$SITE
+
+m = leaflet() %>%
+  addProviderTiles(providers$Esri.WorldImagery) %>% setView(lng = lon.mean, lat = lat.mean, zoom = 8) %>%
+  addCircleMarkers(lat=lat.mean, lng=lon.mean, label = siteName,
+                   radius = 8, fillColor = "#791e89", fillOpacity = 0.7, color = "white", weight = 2) %>%
+  addCircleMarkers(data=QLDtowns, lat = ~lat, lng = ~lng, label = ~NAME,
+                   labelOptions = labelOptions(noHide = T, textOnly = TRUE, style= list(color="white", "font-size" = "12px")),
+                   radius = 4, fillColor = "black", fillOpacity = 0.7, color = "white", weight = 1)
+m
+```
+
+
+### Basic statistics of the Time Series
+
+
+```{r}
+### make summary statistics table
+statTable = data.frame(Item = character(),
+                       Value = character(),
+                       stringsAsFactors = FALSE)
+
+## get the max TEMP.q95
+tempq95.summer.max = round(quantile(TEMP.hour$TEMP[TEMP.hour$yDay<=120], 0.95, na.rm=T), 2)
+tempmax.summer.2016 = round(max(TEMP.hour$TEMP[TEMP.hour$yDay<=120 & year(TEMP.hour$TIME)==2016], na.rm=T), 2)
+tempmax.summer.2017 = round(max(TEMP.hour$TEMP[TEMP.hour$yDay<=120 & year(TEMP.hour$TIME)==2017], na.rm=T), 2)
+Tempsummer.maxmean = quantile(TEMP.hour$TEMP[TEMP.hour$yDay<=120], 0.95, na.rm=T)
+availableYears = seqToHumanReadable(paste0(unique(year(TEMP.day$TIME), collapse=",")))
+availableDepths = paste0(sort(unique(TEMP.day$DEPTH[!is.na(TEMP.day$TEMP)])), collapse = ", ")
+
+tableList = list(c("SITE", globalMD$SITE_NAME),
+                 c("TYPE", "MOORING"),
+                 c("Longitude", as.character(round(globalMD$LONGITUDE, 4))),
+                 c("Latitude", as.character(round(globalMD$LATITUDE, 4))),
+                 c("START date", as.character(globalMD$DATE_START)),
+                 c("END date", as.character(globalMD$DATE_END)),
+                 c("Available Years", availableYears),
+                 c("Available Depths", availableDepths),
+                 c("Historical summer TEMP (p95%)", as.character(tempq95.summer.max)),
+                 c("2016 summer max TEMP", as.character(tempmax.summer.2016)),
+                 c("2017 summer max TEMP", as.character(tempmax.summer.2017)))
+
+
+statsTable = data.frame(Item = character(),
+                        Value = character(),
+                        stringsAsFactors = FALSE)
+for (item in 1: length(tableList)){
+  statsTable = bind_rows(statsTable,
+                         data.frame(Item = tableList[[item]][[1]],
+                                    Value = tableList[[item]][[2]],
+                                    stringsAsFactors = FALSE))
+}
+
+DT::datatable(statsTable, colnames=c("", ""), caption = tags$h2(paste0(globalMD$SITE_NAME, " -- Mooring")),
+              options = list(pageLength = 6, dom = 'tip'), rownames = FALSE, fillContainer = T)
+
+
+```
+
+
+
+### Description
+
+Mass coral bleaching has occurred on the Great Barrier Reef (GBR) in 2016 and 2017 as part of global bleaching event that started in late 2014 (NOAA). The combined effect has meant that more area of the reefs throughout the GBR have bleached to some degree of severity, depending the duration and extreme temperature stress above the historical summer maximum temperature for each location.
+
+The main sources of temperature data for the GBR are:
+
+- [AIMS loggers program](http://maps.aims.gov.au/index.html?intro=false&z=4&ll=142.91883,-17.51872&l0=aims_aims:AIMS - Temperature Loggers,ea_World_NE2-coast-cities-reefs_Baselayer)
+- [AIMS Weather Stations](https://weather.aims.gov.au/#/overview)
+- [IMOS National Moorings Network](http://imos.org.au/facilities/nationalmooringnetwork/)
+- [IMOS Glider program](http://imos.org.au/facilities/oceangliders/)
+- [QLD waveriders program](https://www.qld.gov.au/environment/coasts-waterways/beach/monitoring/waves-sites)
+- [NOAA Coral Reef Watch](https://coralreefwatch.noaa.gov/satellite/index.php)
+
+The description of the mooring arrangement and instruments is available at [AIMS IMOS Queensland and Northern Australia Moorings](https://www.aims.gov.au/imosmoorings)
+
+Row
+-------------------------------------
+
+### Historical summer mean Temperature @ 20m
+
+```{r}
+valueBox(value=round(mean(TEMP.hour$TEMP[TEMP.hour$yDay<=120 & TEMP.hour$DEPTH==10], na.rm=T) ,1), icon="fa-thermometer-half", color = "#335b84")
+```
+
+### Historical summer mean Temperature @ 40m
+
+```{r}
+## check if there are valid values
+if (sum(!is.na(TEMP.hour$TEMP[TEMP.hour$DEPTH==40]))==0){
+  valueBox(value=NA, icon="fa-thermometer-half", color = "#335b84")
+}else {
+  valueBox(value=round(mean(TEMP.hour$TEMP[TEMP.hour$yDay<=120 & TEMP.hour$DEPTH==40], na.rm=T) ,1), icon="fa-thermometer-half", color = "#335b84")
+}
+```
+
+### Historical summer mean Temperature @ 60m
+
+```{r}
+## check if there are valid values
+if (sum(!is.na(TEMP.hour$TEMP[TEMP.hour$DEPTH==60]))==0){
+  valueBox(value=NA, icon="fa-thermometer-half", color = "#335b84")
+}else {
+  valueBox(value=round(mean(TEMP.hour$TEMP[TEMP.hour$yDay<=120 & TEMP.hour$DEPTH==60], na.rm=T) ,1), icon="fa-thermometer-half", color = "#335b84")
+}
+```
+
+### Historial summer Maximum 95% percentile
+
+```{r}
+valueBox(value = tempq95.summer.max, icon = "fa-thermometer-three-quarters", color = "#335b84")
+```
+
+### 2016: Days above summer 95% percentile
+
+```{r}
+## at 20m depth
+daysAboveMax.2016 = TEMP.day %>% filter(year(TIME)==2016, yDay<=120, DEPTH==20, TEMP>tempq95.summer.max) %>%
+  summarise(n = n())
+gauge(value = daysAboveMax.2016$n, min = 0, max = 120)
+
+```
+
+### 2017: Days above summer max
+
+```{r}
+daysAboveMax.2017 = TEMP.day %>% filter(year(TIME)==2017, yDay<=120, DEPTH==20, TEMP>tempq95.summer.max) %>%
+  summarise(n = n())
+gauge(value = daysAboveMax.2017$n, min = 0, max = 120)
+
+```
+
+
+
+Row
+---------------------------------------
+
+```{r}
+## profile plot
+pp = ggplot(TEMP.day %>% filter(TIME>=ymd(20151001), TIME<=ymd(20170930), DEPTH>=20, DEPTH<=55),
+           aes(TIME, DEPTH, fill=TEMP))
+pp = pp + geom_raster() +
+ scale_y_reverse() +
+ scale_color_gradientn(colors = cmocean("thermal")(20), na.value = "white", aesthetics = "fill") +
+ labs(x="", y="Depth (m)") +
+ theme_pubclean()
+
+pp = ggplotly(pp, width = 1200)
+pp
+```
+
+
+
+
+Row
+----------------------------------------
+
+### Comments
+
+The maximun temperature reported in the value Box is the maximum value of the 95% percentile of the day. This quantile avoids the effect of over-heating in some loggers located in the reef flat due to an occasional exposure to the air.
+
+The data used for the profile plot was obtained from [IMOS Long Time Series Product: gridded Temperature](https://github.com/aodn/python-aodntools/blob/master/aodntools/timeseries_products/Documentation/Gridded_timeseries.md) available at [IMOS THREDDS server](http://thredds.aodn.org.au/thredds/catalog/IMOS/ANMN/catalog.html).
+
+
+
+
+TIME SERIES
+=========================================
+
+Row {.tabset}
+-----------------------------------------
+
+### 20m
+
+```{r}
+TEMP.hour.depth = TEMP.hour %>%filter(DEPTH==20)
+TEMP.day.depth = TEMP.day %>% filter(DEPTH==20)
+
+fig = plot_ly() %>%
+  add_trace(x = ~TEMP.hour.depth$TIME, y=~TEMP.hour.depth$TEMP, type="scatter", mode="lines",
+           line = list(color = "steelblue"), name = "Hourly", connectgaps=FALSE) %>%
+  add_trace(x=~TEMP.day.depth$TIME, y=~TEMP.day.depth$TEMP, mode='lines', type="scatter",
+                  line = list(color = "blue"), name = "Day mean", connectgaps=FALSE) %>%
+  layout(xaxis = list(title=""), yaxis = list(title = "Temperature (°C)"),
+         yaxis = list(range = c(temp.scale.min, Temp.scale.max))) %>%
+  rangeslider(start=ymd(20161001), end = ymd(20170430))
+fig = fig %>% config(fig, displaylogo = FALSE)
+
+fig
+
+```
+
+
+
+### 30m
+
+```{r}
+TEMP.hour.depth = TEMP.hour %>%filter(DEPTH==30)
+TEMP.day.depth = TEMP.day %>% filter(DEPTH==30)
+
+fig = plot_ly() %>%
+  add_trace(x = ~TEMP.hour.depth$TIME, y=~TEMP.hour.depth$TEMP, type="scatter", mode="lines",
+           line = list(color = "steelblue"), name = "Hourly", connectgaps=FALSE) %>%
+  add_trace(x=~TEMP.day.depth$TIME, y=~TEMP.day.depth$TEMP, mode='lines', type="scatter",
+                  line = list(color = "blue"), name = "Day mean", connectgaps=FALSE) %>%
+  layout(xaxis = list(title=""), yaxis = list(title = "Temperature (°C)"),
+         yaxis = list(range = c(temp.scale.min, Temp.scale.max))) %>%
+  rangeslider(start=ymd(20161001), end = ymd(20170430))
+fig = fig %>% config(fig, displaylogo = FALSE)
+
+fig
+
+```
+
+
+### 40m
+
+```{r}
+TEMP.hour.depth = TEMP.hour %>%filter(DEPTH==40)
+TEMP.day.depth = TEMP.day %>% filter(DEPTH==40)
+
+fig = plot_ly() %>%
+  add_trace(x = ~TEMP.hour.depth$TIME, y=~TEMP.hour.depth$TEMP, type="scatter", mode="lines",
+           line = list(color = "steelblue"), name = "Hourly", connectgaps=FALSE) %>%
+  add_trace(x=~TEMP.day.depth$TIME, y=~TEMP.day.depth$TEMP, mode='lines', type="scatter",
+                  line = list(color = "blue"), name = "Day mean", connectgaps=FALSE) %>%
+  layout(xaxis = list(title=""), yaxis = list(title = "Temperature (°C)"),
+         yaxis = list(range = c(temp.scale.min, Temp.scale.max))) %>%
+  rangeslider(start=ymd(20161001), end = ymd(20170430))
+fig = fig %>% config(fig, displaylogo = FALSE)
+
+fig
+
+```
+
+
+### 50m
+
+```{r}
+TEMP.hour.depth = TEMP.hour %>%filter(DEPTH==50)
+TEMP.day.depth = TEMP.day %>% filter(DEPTH==50)
+
+fig = plot_ly() %>%
+  add_trace(x = ~TEMP.hour.depth$TIME, y=~TEMP.hour.depth$TEMP, type="scatter", mode="lines",
+           line = list(color = "steelblue"), name = "Hourly", connectgaps=FALSE) %>%
+  add_trace(x=~TEMP.day.depth$TIME, y=~TEMP.day.depth$TEMP, mode='lines', type="scatter",
+                  line = list(color = "blue"), name = "Day mean", connectgaps=FALSE) %>%
+  layout(xaxis = list(title=""), yaxis = list(title = "Temperature (°C)"),
+         yaxis = list(range = c(temp.scale.min, Temp.scale.max))) %>%
+  rangeslider(start=ymd(20161001), end = ymd(20170430))
+fig = fig %>% config(fig, displaylogo = FALSE)
+
+fig
+
+```
+
+
+### 60m
+
+```{r}
+TEMP.hour.depth = TEMP.hour %>%filter(DEPTH==60)
+TEMP.day.depth = TEMP.day %>% filter(DEPTH==60)
+
+fig = plot_ly() %>%
+  add_trace(x = ~TEMP.hour.depth$TIME, y=~TEMP.hour.depth$TEMP, type="scatter", mode="lines",
+           line = list(color = "steelblue"), name = "Hourly", connectgaps=FALSE) %>%
+  add_trace(x=~TEMP.day.depth$TIME, y=~TEMP.day.depth$TEMP, mode='lines', type="scatter",
+                  line = list(color = "blue"), name = "Day mean", connectgaps=FALSE) %>%
+  layout(xaxis = list(title=""), yaxis = list(title = "Temperature (°C)"),
+         yaxis = list(range = c(temp.scale.min, Temp.scale.max))) %>%
+  rangeslider(start=ymd(20161001), end = ymd(20170430))
+fig = fig %>% config(fig, displaylogo = FALSE)
+
+fig
+
+```
+
+
+Column
+------------------------------------------------
+
+#### Comentary
+
+The times series represents all the available records upto December 2019. For more details and to download the original data
+go to the [IMOS TREDDS server](http://thredds.aodn.org.au/thredds/catalog/IMOS/ANMN/catalog.html) and look for the gridded times series in each site directory folder
+
+
+

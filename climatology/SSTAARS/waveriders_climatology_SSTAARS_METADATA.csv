@@ -1,0 +1,14 @@
+SITE_ID,SITE,SITE_longitude,SITE_latitude,climFileName
+30002,Brisbane,153.633083333333,-27.4945833333333,Brisbane_waverider_clim-SSTAARS.csv
+30003,Bundaberg,152.4994,-24.6724833333333,Bundaberg_waverider_clim-SSTAARS.csv
+30004,Cairns,145.710366666667,-16.7336,Cairns_waverider_clim-SSTAARS.csv
+30005,Caloundra,153.155,-26.8467,Caloundra_waverider_clim-SSTAARS.csv
+30006,Emu Park,151.071666666667,-23.3038,EmuPark_waverider_clim-SSTAARS.csv
+30007,Gladstone,151.503283333333,-23.8957666666667,Gladstone_waverider_clim-SSTAARS.csv
+30008,Gold Coast,153.441666666667,-27.9646,GoldCoast_waverider_clim-SSTAARS.csv
+30009,Hay Point,149.3116,-21.2722,HayPoint_waverider_clim-SSTAARS.csv
+30010,Mackay,149.5467,-21.0373333333333,Mackay_waverider_clim-SSTAARS.csv
+30011,Mooloolaba,153.18215,-26.5656666666667,Mooloolaba_waverider_clim-SSTAARS.csv
+30012,North Moreton,153.2788,-26.8985,NorthMoreton_waverider_clim-SSTAARS.csv
+30013,Townsville,147.058733333333,-19.159,Townsville_waverider_clim-SSTAARS.csv
+30014,Tweed Heads,153.5765,-28.17625,TweedHeads_waverider_clim-SSTAARS.csv
