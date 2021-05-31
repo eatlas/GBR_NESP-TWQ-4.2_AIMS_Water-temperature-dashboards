@@ -66,10 +66,10 @@ This project is released under GPL-3 for compatibility with dependencies' licenc
 | flexdashboard: | MIT               | https://cran.r-project.org/web/packages/flexdashboard/index.html |
 | ggplot2:       | MIT               | https://cran.r-project.org/web/packages/ggplot2/index.html       |
 | ggpubr:        | GPL-2             | https://cran.r-project.org/web/packages/ggpubr/index.html        |
-| htmltools:     | GPL-2 | GPL-3     | https://cran.r-project.org/web/packages/htmltools/index.html     |
+| htmltools:     | GPL-2, GPL-3      | https://cran.r-project.org/web/packages/htmltools/index.html     |
 | leaflet:       | GPL-3             | https://cran.r-project.org/web/packages/leaflet/index.html       |
-| lubridate:     | GPL-2 | GPL-3     | https://cran.r-project.org/web/packages/lubridate/index.html     |
+| lubridate:     | GPL-2, GPL-3      | https://cran.r-project.org/web/packages/lubridate/index.html     |
 | plotly:        | MIT               | https://cran.r-project.org/web/packages/plotly/index.html        |
-| readr:         | GPL-2 | GPL-3     | https://cran.r-project.org/web/packages/readr/index.html         |
-| R.utils:       | LGPL-2.1 | LGPL-3 | https://cran.r-project.org/web/packages/R.utils/index.html       |
+| readr:         | GPL-2, GPL-3      | https://cran.r-project.org/web/packages/readr/index.html         |
+| R.utils:       | LGPL-2.1, LGPL-3  | https://cran.r-project.org/web/packages/R.utils/index.html       |
 | stringr:       | GPL-2             | https://cran.r-project.org/web/packages/stringr/index.html       |
